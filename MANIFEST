@@ -12,6 +12,7 @@ t/002-extension.t
 t/003-io.t
 t/004-get.t
 t/005-isa.t
+t/006-addsub.t
 t/010-synopsis.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

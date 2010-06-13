@@ -1,6 +1,6 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.03';
+  $Package::Stash::VERSION = '0.04';
 }
 use strict;
 use warnings;
@@ -14,7 +14,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
 
@@ -105,7 +105,7 @@ sub namespace {
     }
 }
 
-=head2 add_package_symbol $variable $value
+=head2 add_package_symbol $variable $value %opts
 
 Adds a new package symbol, for the symbol given as C<$variable>, and optionally
 gives it an initial value of C<$value>. C<$variable> should be the name of
@@ -114,6 +114,22 @@ variable including the sigil, so
   Package::Stash->new('Foo')->add_package_symbol('%foo')
 
 will create C<%Foo::foo>.
+
+Valid options (all optional) are C<filename>, C<first_line_num>, and
+C<last_line_num>.
+
+C<$opts{filename}>, C<$opts{first_line_num}>, and C<$opts{last_line_num}> can
+be used to indicate where the symbol should be regarded as having been defined.
+Currently these values are only used if the symbol is a subroutine ('C<&>'
+sigil) and only if C<$^P & 0x10> is true, in which case the special C<%DB::sub>
+hash is updated to record the values of C<filename>, C<first_line_num>, and
+C<last_line_num> for the subroutine. If these are not passed, their values are
+inferred (as much as possible) from C<caller> information.
+
+This is especially useful for debuggers and profilers, which use C<%DB::sub> to
+determine where the source code for a subroutine can be found.  See
+L<http://perldoc.perl.org/perldebguts.html#Debugger-Internals> for more
+information about C<%DB::sub>.
 
 =cut
 
@@ -131,18 +147,32 @@ sub _valid_for_type {
 }
 
 sub add_package_symbol {
-    my ($self, $variable, $initial_value) = @_;
+    my ($self, $variable, $initial_value, %opts) = @_;
 
     my ($name, $sigil, $type) = ref $variable eq 'HASH'
         ? @{$variable}{qw[name sigil type]}
         : $self->_deconstruct_variable_name($variable);
 
+    my $pkg = $self->name;
+
     if (@_ > 2) {
         $self->_valid_for_type($initial_value, $type)
             || confess "$initial_value is not of type $type";
-    }
 
-    my $pkg = $self->name;
+        # cheap fail-fast check for PERLDBf_SUBLINE and '&'
+        if ($^P and $^P & 0x10 && $sigil eq '&') {
+            my $filename = $opts{filename};
+            my $first_line_num = $opts{first_line_num};
+
+            (undef, $filename, $first_line_num) = caller
+                if not defined $filename;
+
+            my $last_line_num = $opts{last_line_num} || ($first_line_num ||= 0);
+
+            # http://perldoc.perl.org/perldebguts.html#Debugger-Internals
+            $DB::sub{$pkg . '::' . $name} = "$filename:$first_line_num-$last_line_num";
+        }
+    }
 
     no strict 'refs';
     no warnings 'redefine', 'misc', 'prototype';
@@ -203,7 +233,7 @@ Returns the value of the given package variable (including sigil).
 =cut
 
 sub get_package_symbol {
-    my ($self, $variable) = @_;
+    my ($self, $variable, %opts) = @_;
 
     my ($name, $sigil, $type) = ref $variable eq 'HASH'
         ? @{$variable}{qw[name sigil type]}
@@ -218,10 +248,10 @@ sub get_package_symbol {
         # accessed... in the case of @ISA, this might never happen
         # for instance, assigning like that and then calling $obj->isa
         # will fail. see t/005-isa.t
-        if ($type eq 'ARRAY' && $name ne 'ISA') {
+        if ($opts{vivify} && $type eq 'ARRAY' && $name ne 'ISA') {
             $self->add_package_symbol($variable, []);
         }
-        elsif ($type eq 'HASH') {
+        elsif ($opts{vivify} && $type eq 'HASH') {
             $self->add_package_symbol($variable, {});
         }
         else {
@@ -244,6 +274,18 @@ sub get_package_symbol {
             return undef;
         }
     }
+}
+
+=head2 get_or_add_package_symbol $variable
+
+Like C<get_package_symbol>, except that it will return an empty hashref or
+arrayref if the variable doesn't exist.
+
+=cut
+
+sub get_or_add_package_symbol {
+    my $self = shift;
+    $self->get_package_symbol(@_, vivify => 1);
 }
 
 =head2 remove_package_symbol $variable
