@@ -1,49 +1,14 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.04';
+  $Package::Stash::VERSION = '0.05';
 }
 use strict;
 use warnings;
+# ABSTRACT: routines for manipulating stashes
 
 use Carp qw(confess);
 use Scalar::Util qw(reftype);
 
-=head1 NAME
-
-Package::Stash - routines for manipulating stashes
-
-=head1 VERSION
-
-version 0.04
-
-=head1 SYNOPSIS
-
-  my $stash = Package::Stash->new('Foo');
-  $stash->add_package_symbol('%foo', {bar => 1});
-  # $Foo::foo{bar} == 1
-  $stash->has_package_symbol('$foo') # false
-  my $namespace = $stash->namespace;
-  *{ $namespace->{foo} }{HASH} # {bar => 1}
-
-=head1 DESCRIPTION
-
-Manipulating stashes (Perl's symbol tables) is occasionally necessary, but
-incredibly messy, and easy to get wrong. This module hides all of that behind a
-simple API.
-
-NOTE: Most methods in this class require a variable specification that includes
-a sigil. If this sigil is absent, it is assumed to represent the IO slot.
-
-=head1 METHODS
-
-=cut
-
-=head2 new $package_name
-
-Creates a new C<Package::Stash> object, for the package given as the only
-argument.
-
-=cut
 
 sub new {
     my $class = shift;
@@ -51,30 +16,20 @@ sub new {
     return bless { 'package' => $namespace }, $class;
 }
 
-=head2 name
-
-Returns the name of the package that this object represents.
-
-=cut
 
 sub name {
     return $_[0]->{package};
 }
 
-=head2 namespace
-
-Returns the raw stash itself.
-
-=cut
 
 sub namespace {
     # NOTE:
-    # because of issues with the Perl API 
-    # to the typeglob in some versions, we 
-    # need to just always grab a new 
-    # reference to the hash here. Ideally 
+    # because of issues with the Perl API
+    # to the typeglob in some versions, we
+    # need to just always grab a new
+    # reference to the hash here. Ideally
     # we could just store a ref and it would
-    # Just Work, but oh well :\    
+    # Just Work, but oh well :\
     no strict 'refs';
     return \%{$_[0]->name . '::'};
 }
@@ -105,33 +60,6 @@ sub namespace {
     }
 }
 
-=head2 add_package_symbol $variable $value %opts
-
-Adds a new package symbol, for the symbol given as C<$variable>, and optionally
-gives it an initial value of C<$value>. C<$variable> should be the name of
-variable including the sigil, so
-
-  Package::Stash->new('Foo')->add_package_symbol('%foo')
-
-will create C<%Foo::foo>.
-
-Valid options (all optional) are C<filename>, C<first_line_num>, and
-C<last_line_num>.
-
-C<$opts{filename}>, C<$opts{first_line_num}>, and C<$opts{last_line_num}> can
-be used to indicate where the symbol should be regarded as having been defined.
-Currently these values are only used if the symbol is a subroutine ('C<&>'
-sigil) and only if C<$^P & 0x10> is true, in which case the special C<%DB::sub>
-hash is updated to record the values of C<filename>, C<first_line_num>, and
-C<last_line_num> for the subroutine. If these are not passed, their values are
-inferred (as much as possible) from C<caller> information.
-
-This is especially useful for debuggers and profilers, which use C<%DB::sub> to
-determine where the source code for a subroutine can be found.  See
-L<http://perldoc.perl.org/perldebguts.html#Debugger-Internals> for more
-information about C<%DB::sub>.
-
-=cut
 
 sub _valid_for_type {
     my $self = shift;
@@ -179,11 +107,6 @@ sub add_package_symbol {
     *{$pkg . '::' . $name} = ref $initial_value ? $initial_value : \$initial_value;
 }
 
-=head2 remove_package_glob $name
-
-Removes all package variables with the given name, regardless of sigil.
-
-=cut
 
 sub remove_package_glob {
     my ($self, $name) = @_;
@@ -193,11 +116,6 @@ sub remove_package_glob {
 
 # ... these functions deal with stuff on the namespace level
 
-=head2 has_package_symbol $variable
-
-Returns whether or not the given package variable (including sigil) exists.
-
-=cut
 
 sub has_package_symbol {
     my ($self, $variable) = @_;
@@ -226,11 +144,6 @@ sub has_package_symbol {
     }
 }
 
-=head2 get_package_symbol $variable
-
-Returns the value of the given package variable (including sigil).
-
-=cut
 
 sub get_package_symbol {
     my ($self, $variable, %opts) = @_;
@@ -276,25 +189,12 @@ sub get_package_symbol {
     }
 }
 
-=head2 get_or_add_package_symbol $variable
-
-Like C<get_package_symbol>, except that it will return an empty hashref or
-arrayref if the variable doesn't exist.
-
-=cut
 
 sub get_or_add_package_symbol {
     my $self = shift;
     $self->get_package_symbol(@_, vivify => 1);
 }
 
-=head2 remove_package_symbol $variable
-
-Removes the package variable described by C<$variable> (which includes the
-sigil); other variables with the same name but different sigils will be
-untouched.
-
-=cut
 
 sub remove_package_symbol {
     my ($self, $variable) = @_;
@@ -304,7 +204,7 @@ sub remove_package_symbol {
         : $self->_deconstruct_variable_name($variable);
 
     # FIXME:
-    # no doubt this is grossly inefficient and 
+    # no doubt this is grossly inefficient and
     # could be done much easier and faster in XS
 
     my ($scalar_desc, $array_desc, $hash_desc, $code_desc, $io_desc) = (
@@ -359,14 +259,6 @@ sub remove_package_symbol {
     $self->add_package_symbol($io_desc     => $io)     if defined $io;
 }
 
-=head2 list_all_package_symbols $type_filter
-
-Returns a list of package variable names in the package, without sigils. If a
-C<type_filter> is passed, it is used to select package variables of a given
-type, where valid types are the slots of a typeglob ('SCALAR', 'CODE', 'HASH',
-etc).
-
-=cut
 
 sub list_all_package_symbols {
     my ($self, $type_filter) = @_;
@@ -375,7 +267,7 @@ sub list_all_package_symbols {
     return keys %{$namespace} unless defined $type_filter;
 
     # NOTE:
-    # or we can filter based on 
+    # or we can filter based on
     # type (SCALAR|ARRAY|HASH|CODE)
     if ($type_filter eq 'CODE') {
         return grep {
@@ -389,6 +281,109 @@ sub list_all_package_symbols {
     }
 }
 
+
+1;
+
+__END__
+=pod
+
+=head1 NAME
+
+Package::Stash - routines for manipulating stashes
+
+=head1 VERSION
+
+version 0.05
+
+=head1 SYNOPSIS
+
+  my $stash = Package::Stash->new('Foo');
+  $stash->add_package_symbol('%foo', {bar => 1});
+  # $Foo::foo{bar} == 1
+  $stash->has_package_symbol('$foo') # false
+  my $namespace = $stash->namespace;
+  *{ $namespace->{foo} }{HASH} # {bar => 1}
+
+=head1 DESCRIPTION
+
+Manipulating stashes (Perl's symbol tables) is occasionally necessary, but
+incredibly messy, and easy to get wrong. This module hides all of that behind a
+simple API.
+
+NOTE: Most methods in this class require a variable specification that includes
+a sigil. If this sigil is absent, it is assumed to represent the IO slot.
+
+=head1 METHODS
+
+=head2 new $package_name
+
+Creates a new C<Package::Stash> object, for the package given as the only
+argument.
+
+=head2 name
+
+Returns the name of the package that this object represents.
+
+=head2 namespace
+
+Returns the raw stash itself.
+
+=head2 add_package_symbol $variable $value %opts
+
+Adds a new package symbol, for the symbol given as C<$variable>, and optionally
+gives it an initial value of C<$value>. C<$variable> should be the name of
+variable including the sigil, so
+
+  Package::Stash->new('Foo')->add_package_symbol('%foo')
+
+will create C<%Foo::foo>.
+
+Valid options (all optional) are C<filename>, C<first_line_num>, and
+C<last_line_num>.
+
+C<$opts{filename}>, C<$opts{first_line_num}>, and C<$opts{last_line_num}> can
+be used to indicate where the symbol should be regarded as having been defined.
+Currently these values are only used if the symbol is a subroutine ('C<&>'
+sigil) and only if C<$^P & 0x10> is true, in which case the special C<%DB::sub>
+hash is updated to record the values of C<filename>, C<first_line_num>, and
+C<last_line_num> for the subroutine. If these are not passed, their values are
+inferred (as much as possible) from C<caller> information.
+
+This is especially useful for debuggers and profilers, which use C<%DB::sub> to
+determine where the source code for a subroutine can be found.  See
+L<http://perldoc.perl.org/perldebguts.html#Debugger-Internals> for more
+information about C<%DB::sub>.
+
+=head2 remove_package_glob $name
+
+Removes all package variables with the given name, regardless of sigil.
+
+=head2 has_package_symbol $variable
+
+Returns whether or not the given package variable (including sigil) exists.
+
+=head2 get_package_symbol $variable
+
+Returns the value of the given package variable (including sigil).
+
+=head2 get_or_add_package_symbol $variable
+
+Like C<get_package_symbol>, except that it will return an empty hashref or
+arrayref if the variable doesn't exist.
+
+=head2 remove_package_symbol $variable
+
+Removes the package variable described by C<$variable> (which includes the
+sigil); other variables with the same name but different sigils will be
+untouched.
+
+=head2 list_all_package_symbols $type_filter
+
+Returns a list of package variable names in the package, without sigils. If a
+C<type_filter> is passed, it is used to select package variables of a given
+type, where valid types are the slots of a typeglob ('SCALAR', 'CODE', 'HASH',
+etc).
+
 =head1 BUGS
 
 No known bugs.
@@ -399,8 +394,13 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Package-Stash>.
 
 =head1 SEE ALSO
 
-L<Class::MOP::Package> - this module is a factoring out of code that used to
-live here
+=over 4
+
+=item * L<Class::MOP::Package>
+
+This module is a factoring out of code that used to live here
+
+=back
 
 =head1 SUPPORT
 
@@ -434,16 +434,12 @@ L<http://search.cpan.org/dist/Package-Stash>
 
   Jesse Luehrs <doy at tozt dot net>
 
-Mostly copied from code from L<Class::MOP::Package>, by Stevan Little and the
-Moose Cabal.
-
 =head1 COPYRIGHT AND LICENSE
 
 This software is copyright (c) 2010 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
-the same terms as perl itself.
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
-1;

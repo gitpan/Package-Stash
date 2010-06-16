@@ -11,7 +11,10 @@ use ExtUtils::MakeMaker 6.31;
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'routines for manipulating stashes',
   'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
-  'BUILD_REQUIRES' => {},
+  'BUILD_REQUIRES' => {
+    'Test::Exception' => '0',
+    'Test::More' => '0.88'
+  },
   'CONFIGURE_REQUIRES' => {
     'ExtUtils::MakeMaker' => '6.31'
   },
@@ -20,10 +23,9 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'Package::Stash',
   'PREREQ_PM' => {
-    'Scalar::Util' => '0',
-    'Test::Exception' => '0'
+    'Scalar::Util' => '0'
   },
-  'VERSION' => '0.04',
+  'VERSION' => '0.05',
   'test' => {
     'TESTS' => 't/*.t'
   }
