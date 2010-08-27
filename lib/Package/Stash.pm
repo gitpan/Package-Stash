@@ -1,6 +1,6 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.05';
+  $Package::Stash::VERSION = '0.06';
 }
 use strict;
 use warnings;
@@ -12,8 +12,18 @@ use Scalar::Util qw(reftype);
 
 sub new {
     my $class = shift;
-    my ($namespace) = @_;
-    return bless { 'package' => $namespace }, $class;
+    my ($package) = @_;
+    my $namespace;
+    {
+        no strict 'refs';
+        # supposedly this caused a bug in earlier perls, but I can't reproduce
+        # it, so re-enabling the caching
+        $namespace = \%{$package . '::'};
+    }
+    return bless {
+        'package'   => $package,
+        'namespace' => $namespace,
+    }, $class;
 }
 
 
@@ -23,15 +33,7 @@ sub name {
 
 
 sub namespace {
-    # NOTE:
-    # because of issues with the Perl API
-    # to the typeglob in some versions, we
-    # need to just always grab a new
-    # reference to the hash here. Ideally
-    # we could just store a ref and it would
-    # Just Work, but oh well :\
-    no strict 'refs';
-    return \%{$_[0]->name . '::'};
+    return $_[0]->{namespace};
 }
 
 {
@@ -293,7 +295,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 SYNOPSIS
 
@@ -392,16 +394,6 @@ Please report any bugs through RT: email
 C<bug-package-stash at rt.cpan.org>, or browse to
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Package-Stash>.
 
-=head1 SEE ALSO
-
-=over 4
-
-=item * L<Class::MOP::Package>
-
-This module is a factoring out of code that used to live here
-
-=back
-
 =head1 SUPPORT
 
 You can find this documentation for this module with the perldoc command.
@@ -432,7 +424,20 @@ L<http://search.cpan.org/dist/Package-Stash>
 
 =head1 AUTHOR
 
-  Jesse Luehrs <doy at tozt dot net>
+Jesse Luehrs <doy at tozt dot net>
+
+Mostly copied from code from L<Class::MOP::Package>, by Stevan Little and the
+Moose Cabal.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Class::MOP::Package>
+
+This module is a factoring out of code that used to live here
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 
