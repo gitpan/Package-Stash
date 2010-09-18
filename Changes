@@ -1,6 +1,9 @@
 Revision history for Package-Stash
 
-0.06  2010-08-26
+0.07  2010-09-18
+      - non-dev release
+
+0.06-TRIAL  2010-08-26
       - re-enable the caching of the stash, since I can't reproduce the bug
         at all
 
