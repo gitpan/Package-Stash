@@ -1,5 +1,9 @@
 Revision history for Package-Stash
 
+0.08  2010-09-18
+      - oops, accidentally included some experimental changes in that last
+        release, that break things
+
 0.07  2010-09-18
       - non-dev release
 
