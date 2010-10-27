@@ -1,5 +1,9 @@
 Revision history for Package-Stash
 
+0.09  2010-10-27
+      - clean up the vivication code a lot, make it behave more sanely
+      - use Test::Fatal instead of Test::Exception (Justin Hunter)
+
 0.08  2010-09-18
       - oops, accidentally included some experimental changes in that last
         release, that break things

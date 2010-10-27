@@ -1,6 +1,6 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.08';
+  $Package::Stash::VERSION = '0.09';
 }
 use strict;
 use warnings;
@@ -8,6 +8,7 @@ use warnings;
 
 use Carp qw(confess);
 use Scalar::Util qw(reftype);
+use Symbol;
 
 
 sub new {
@@ -157,21 +158,39 @@ sub get_package_symbol {
     my $namespace = $self->namespace;
 
     if (!exists $namespace->{$name}) {
-        # assigning to the result of this function like
-        #   @{$stash->get_package_symbol('@ISA')} = @new_ISA
-        # makes the result not visible until the variable is explicitly
-        # accessed... in the case of @ISA, this might never happen
-        # for instance, assigning like that and then calling $obj->isa
-        # will fail. see t/005-isa.t
-        if ($opts{vivify} && $type eq 'ARRAY' && $name ne 'ISA') {
-            $self->add_package_symbol($variable, []);
-        }
-        elsif ($opts{vivify} && $type eq 'HASH') {
-            $self->add_package_symbol($variable, {});
+        if ($opts{vivify}) {
+            if ($type eq 'ARRAY') {
+                $self->add_package_symbol(
+                    $variable,
+                    # setting our own arrayref manually loses the magicalness
+                    # or something
+                    $name eq 'ISA' ? () : ([])
+                );
+            }
+            elsif ($type eq 'HASH') {
+                $self->add_package_symbol($variable, {});
+            }
+            elsif ($type eq 'SCALAR') {
+                $self->add_package_symbol($variable);
+            }
+            elsif ($type eq 'IO') {
+                $self->add_package_symbol($variable, Symbol::geniosym);
+            }
+            elsif ($type eq 'CODE') {
+                confess "Don't know how to vivify CODE variables";
+            }
+            else {
+                confess "Unknown type $type in vivication";
+            }
         }
         else {
-            # FIXME
-            $self->add_package_symbol($variable)
+            if ($type eq 'CODE') {
+                # this effectively "de-vivifies" the code slot. if we don't do
+                # this, referencing the coderef at the end of this function
+                # will cause perl to auto-vivify a stub coderef in the slot,
+                # which isn't what we want
+                $self->add_package_symbol($variable);
+            }
         }
     }
 
@@ -295,7 +314,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 

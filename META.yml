@@ -3,7 +3,7 @@ abstract: 'routines for manipulating stashes'
 author:
   - 'Jesse Luehrs <doy at tozt dot net>'
 build_requires:
-  Test::Exception: 0
+  Test::Fatal: 0
   Test::More: 0.88
 configure_requires:
   ExtUtils::MakeMaker: 6.31
@@ -18,7 +18,7 @@ requires:
   Scalar::Util: 0
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.08
+version: 0.09
 x_Dist_Zilla:
   plugins:
     -
@@ -172,5 +172,5 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: 0
+      is_trial: 1
     version: 4.102340

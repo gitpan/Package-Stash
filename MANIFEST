@@ -6,6 +6,7 @@ META.yml
 Makefile.PL
 README
 dist.ini
+inc/MMPackageStash.pm
 lib/Package/Stash.pm
 t/00-compile.t
 t/01-basic.t

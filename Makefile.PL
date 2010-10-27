@@ -12,7 +12,7 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'routines for manipulating stashes',
   'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
   'BUILD_REQUIRES' => {
-    'Test::Exception' => '0',
+    'Test::Fatal' => '0',
     'Test::More' => '0.88'
   },
   'CONFIGURE_REQUIRES' => {
@@ -25,7 +25,7 @@ my %WriteMakefileArgs = (
   'PREREQ_PM' => {
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.08',
+  'VERSION' => '0.09',
   'test' => {
     'TESTS' => 't/*.t'
   }
