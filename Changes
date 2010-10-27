@@ -1,5 +1,8 @@
 Revision history for Package-Stash
 
+0.10  2010-10-27
+      - only do the weird ISA special-casing on perl versions where it's broken
+
 0.09  2010-10-27
       - clean up the vivication code a lot, make it behave more sanely
       - use Test::Fatal instead of Test::Exception (Justin Hunter)
