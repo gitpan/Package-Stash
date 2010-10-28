@@ -18,7 +18,7 @@ requires:
   Scalar::Util: 0
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.11
+version: 0.12
 x_Dist_Zilla:
   plugins:
     -
@@ -58,9 +58,9 @@ x_Dist_Zilla:
       name: '@DOY/ShareDir'
       version: 4.102342
     -
-      class: Dist::Zilla::Plugin::MakeMaker
-      name: '@DOY/MakeMaker'
-      version: 4.102342
+      class: inc::MMPackageStash
+      name: '@DOY/=inc::MMPackageStash'
+      version: ~
     -
       class: Dist::Zilla::Plugin::Manifest
       name: '@DOY/Manifest'

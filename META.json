@@ -38,7 +38,7 @@
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.11",
+   "version" : "0.12",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -87,9 +87,9 @@
             "version" : "4.102342"
          },
          {
-            "class" : "Dist::Zilla::Plugin::MakeMaker",
-            "name" : "@DOY/MakeMaker",
-            "version" : "4.102342"
+            "class" : "inc::MMPackageStash",
+            "name" : "@DOY/=inc::MMPackageStash",
+            "version" : null
          },
          {
             "class" : "Dist::Zilla::Plugin::Manifest",
