@@ -1,6 +1,6 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.10';
+  $Package::Stash::VERSION = '0.11';
 }
 use strict;
 use warnings;
@@ -320,7 +320,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
