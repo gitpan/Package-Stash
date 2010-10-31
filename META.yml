@@ -18,7 +18,7 @@ requires:
   Scalar::Util: 0
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.12
+version: 0.13
 x_Dist_Zilla:
   plugins:
     -
@@ -172,5 +172,5 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: 1
+      is_trial: 0
     version: 4.102342

@@ -24,7 +24,7 @@ my %WriteMakefileArgs = (
   'PREREQ_PM' => {
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.12',
+  'VERSION' => '0.13',
   'test' => {
     'TESTS' => 't/*.t'
   }
@@ -51,8 +51,8 @@ WriteMakefile(%WriteMakefileArgs);
 
 sub check_conflicts {
     my %conflicts = (
-        'Class::MOP'                    => '1.08',
-        'MooseX::Role::WithOverloading' => '0.08',
+    #    'Class::MOP'                    => '1.08',
+    #    'MooseX::Role::WithOverloading' => '0.08',
     );
     my $found = 0;
     for my $mod ( sort keys %conflicts ) {
