@@ -21,24 +21,30 @@
       },
       "runtime" : {
          "requires" : {
-            "Scalar::Util" : 0
+            "Package::DeprecationManager" : 0,
+            "Scalar::Util" : 0,
+            "perl" : "v5.8.3"
          }
       },
       "test" : {
+         "recommends" : {
+            "Test::LeakTrace" : 0
+         },
          "requires" : {
             "Test::Fatal" : 0,
-            "Test::More" : "0.88"
+            "Test::More" : "0.88",
+            "Test::Requires" : 0
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "repository" : {
          "type" : "git",
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.13",
+   "version" : "0.14",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -209,6 +215,22 @@
             "version" : "4.102342"
          },
          {
+            "class" : "Dist::Zilla::Plugin::Prereqs",
+            "config" : {
+               "Dist::Zilla::Plugin::Prereqs" : {
+                  "phase" : "test",
+                  "type" : "recommends"
+               }
+            },
+            "name" : "TestRecommends",
+            "version" : "4.102342"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PruneFiles",
+            "name" : "PruneFiles",
+            "version" : "4.102342"
+         },
+         {
             "class" : "Dist::Zilla::Plugin::FinderCode",
             "name" : ":InstallModules",
             "version" : "4.102342"
@@ -232,7 +254,7 @@
       "zilla" : {
          "class" : "Dist::Zilla::Dist::Builder",
          "config" : {
-            "is_trial" : 0
+            "is_trial" : 1
          },
          "version" : "4.102342"
       }

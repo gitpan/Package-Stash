@@ -1,5 +1,10 @@
 Revision history for Package-Stash
 
+0.14  2010-11-14
+      - complete rewrite in C, for speed (this includes the vivification
+        changes from earlier). should be entirely backwards compatible
+        otherwise (in terms of documented api anyway).
+
 0.13  2010-10-31
       - revert the vivification changes for now, to get an actual release out
         with Test::Fatal
