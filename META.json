@@ -22,6 +22,7 @@
       "runtime" : {
          "requires" : {
             "Package::DeprecationManager" : 0,
+            "Package::Stash::XS" : 0,
             "Scalar::Util" : 0,
             "perl" : "v5.8.3"
          }
@@ -44,7 +45,7 @@
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.14",
+   "version" : "0.15",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -223,11 +224,6 @@
                }
             },
             "name" : "TestRecommends",
-            "version" : "4.102342"
-         },
-         {
-            "class" : "Dist::Zilla::Plugin::PruneFiles",
-            "name" : "PruneFiles",
             "version" : "4.102342"
          },
          {

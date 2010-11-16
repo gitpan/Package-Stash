@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use lib 't/lib';
 use Test::More;
 
 use Package::Stash;
@@ -24,7 +25,9 @@ use Package::Stash;
 }
 
 my $stash = Package::Stash->new('Foo');
-{ local $TODO = $] < 5.010 ? "undef scalars aren't visible on 5.8" : undef;
+{ local $TODO = ($] < 5.010 || $Package::Stash::IMPLEMENTATION eq 'PP')
+      ? "undef scalars aren't visible on 5.8, or from pure perl at all"
+      : undef;
 ok($stash->has_symbol('$SCALAR'), '$SCALAR');
 }
 ok($stash->has_symbol('$SCALAR_WITH_VALUE'), '$SCALAR_WITH_VALUE');
@@ -43,5 +46,10 @@ ok($stash->has_symbol('%added'), '%added');
 
 my $constant = $stash->get_symbol('&FOO');
 is(ref($constant), 'CODE', "expanded a constant into a coderef");
+
+# ensure get doesn't prevent subsequent vivification (not sure what the deal
+# was here)
+is(ref($stash->get_symbol('$glob')), '', "nothing yet");
+is(ref($stash->get_or_add_symbol('$glob')), 'SCALAR', "got an empty scalar");
 
 done_testing;

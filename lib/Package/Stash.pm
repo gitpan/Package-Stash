@@ -1,21 +1,49 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.14';
+  $Package::Stash::VERSION = '0.15';
 }
 use strict;
 use warnings;
 # ABSTRACT: routines for manipulating stashes
 
-use XSLoader;
-XSLoader::load(
-    __PACKAGE__,
-    # we need to be careful not to touch $VERSION at compile time, otherwise
-    # DynaLoader will assume it's set and check against it, which will cause
-    # fail when being run in the checkout without dzil having set the actual
-    # $VERSION
-    exists $Package::Stash::{VERSION}
-        ? ${ $Package::Stash::{VERSION} } : (),
-);
+our $IMPLEMENTATION;
+
+BEGIN {
+    $IMPLEMENTATION = $ENV{PACKAGE_STASH_IMPLEMENTATION}
+        if exists $ENV{PACKAGE_STASH_IMPLEMENTATION};
+
+    my $err;
+    if ($IMPLEMENTATION) {
+        if (!eval "require Package::Stash::$IMPLEMENTATION; 1") {
+            require Carp;
+            Carp::croak("Could not load Package::Stash::$IMPLEMENTATION: $@");
+        }
+    }
+    else {
+        for my $impl ('XS', 'PP') {
+            if (eval "require Package::Stash::$impl; 1;") {
+                $IMPLEMENTATION = $impl;
+                last;
+            }
+            else {
+                $err .= $@;
+            }
+        }
+    }
+
+    if (!$IMPLEMENTATION) {
+        require Carp;
+        Carp::croak("Could not find a suitable Package::Stash implementation: $err");
+    }
+
+    my $impl = "Package::Stash::$IMPLEMENTATION";
+    my $from = $impl->new($impl);
+    my $to = $impl->new(__PACKAGE__);
+    my $methods = $from->get_all_symbols('CODE');
+    for my $meth (keys %$methods) {
+        $to->add_symbol("&$meth" => $methods->{$meth});
+    }
+}
 
 use Package::DeprecationManager -deprecations => {
     'Package::Stash::add_package_symbol'        => 0.14,
@@ -74,7 +102,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
@@ -93,6 +121,16 @@ simple API.
 
 NOTE: Most methods in this class require a variable specification that includes
 a sigil. If this sigil is absent, it is assumed to represent the IO slot.
+
+Due to limitations in the typeglob API available to perl code, and to typeglob
+manipulation in perl being quite slow, this module provides two
+implementations - one in pure perl, and one using XS. The XS implementation is
+to be preferred for most usages; the pure perl one is provided for cases where
+XS modules are not a possibility. The current implementation in use can be set
+by setting C<$ENV{PACKAGE_STASH_IMPLEMENTATION}> or
+C<$Package::Stash::IMPLEMENTATION> before loading Package::Stash (with the
+environment variable taking precedence), otherwise, it will use the XS
+implementation if possible, falling back to the pure perl one.
 
 =head1 METHODS
 
@@ -178,9 +216,9 @@ to the variable names (basically, a clone of the stash).
 
 =over 4
 
-=item * On perl versions prior to 5.10, undefined package scalars will not show up as existing, due to shortcomings within perl.
-
 =item * GLOB and FORMAT variables are not (yet) accessible through this module.
+
+=item * Also, see the BUGS section for the specific backends (L<Package::Stash::XS> and L<Package::Stash::PP>)
 
 =back
 

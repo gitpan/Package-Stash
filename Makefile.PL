@@ -24,11 +24,12 @@ my %WriteMakefileArgs = (
   'NAME' => 'Package::Stash',
   'PREREQ_PM' => {
     'Package::DeprecationManager' => '0',
+    'Package::Stash::XS' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.14',
+  'VERSION' => '0.15',
   'test' => {
-    'TESTS' => 't/*.t'
+    'TESTS' => 't/*.t t/impl-selection/*.t'
   }
 );
 
@@ -49,12 +50,46 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
+delete $WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'}
+  unless can_cc();
+
 WriteMakefile(%WriteMakefileArgs);
 
+use Config ();
+use File::Spec ();
+
+# check if we can run some command
+sub can_run {
+        my ($cmd) = @_;
+
+        my $_cmd = $cmd;
+        return $_cmd if (-x $_cmd or $_cmd = MM->maybe_command($_cmd));
+
+        for my $dir ((split /$Config::Config{path_sep}/, $ENV{PATH}), '.') {
+                next if $dir eq '';
+                my $abs = File::Spec->catfile($dir, $_[1]);
+                return $abs if (-x $abs or $abs = MM->maybe_command($abs));
+        }
+
+        return;
+}
+
+# can we locate a (the) C compiler
+sub can_cc {
+        my @chunks = split(/ /, $Config::Config{cc}) or return;
+
+        # $Config{cc} may contain args; try to find out the program part
+        while (@chunks) {
+                return can_run("@chunks") || (pop(@chunks), next);
+        }
+
+        return;
+}
 sub check_conflicts {
     my %conflicts = (
         'Class::MOP'                    => '1.08',
         'MooseX::Role::WithOverloading' => '0.08',
+        'namespace::clean'              => '0.18',
     );
     my $found = 0;
     for my $mod ( sort keys %conflicts ) {

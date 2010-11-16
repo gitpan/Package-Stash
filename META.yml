@@ -17,11 +17,12 @@ meta-spec:
 name: Package-Stash
 requires:
   Package::DeprecationManager: 0
+  Package::Stash::XS: 0
   Scalar::Util: 0
   perl: 5.8.3
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.14
+version: 0.15
 x_Dist_Zilla:
   plugins:
     -
@@ -163,10 +164,6 @@ x_Dist_Zilla:
           phase: test
           type: recommends
       name: TestRecommends
-      version: 4.102342
-    -
-      class: Dist::Zilla::Plugin::PruneFiles
-      name: PruneFiles
       version: 4.102342
     -
       class: Dist::Zilla::Plugin::FinderCode

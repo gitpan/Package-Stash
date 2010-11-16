@@ -1,11 +1,15 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use lib 't/lib';
 use Test::More;
 use Test::Fatal;
 
+BEGIN { $Package::Stash::IMPLEMENTATION = 'PP' }
+
 use Package::Stash;
+
+ok(exists $INC{'Package/Stash/PP.pm'}, "loaded PP");
+ok(!exists $INC{'Package/Stash/XS.pm'}, "didn't load XS");
 
 like(exception { Package::Stash->name }, qr/Can't call name as a class method/,
    q{... can't call name() as a class method});
