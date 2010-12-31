@@ -1,6 +1,6 @@
 package Package::Stash::PP;
 BEGIN {
-  $Package::Stash::PP::VERSION = '0.15';
+  $Package::Stash::PP::VERSION = '0.16'; # TRIAL
 }
 use strict;
 use warnings;
@@ -333,7 +333,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
@@ -360,6 +360,12 @@ as subroutines (although they will not be available as methods). This can be
 considered a feature in some cases (this is how L<namespace::clean> works, for
 instance), but should not be relied upon - use C<remove_glob> directly if you
 want this behavior.
+
+=item * Some minor memory leaks
+
+The pure perl implementation has a couple minor memory leaks (see the TODO
+tests in t/20-leaks.t) that I'm having a hard time tracking down - these may be
+core perl bugs, it's hard to tell.
 
 =back
 

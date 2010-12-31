@@ -1,6 +1,9 @@
 Revision history for Package-Stash
 
-0.15  2010-11-16
+0.16  2010-12-31
+      - use Dist::CheckConflicts
+
+0.15-TRIAL  2010-11-16
       - split the XS conversion out to its own dist (Package-Stash-XS), and
         convert Package::Stash into a module which loads either the XS or pure
         perl implementation, depending on what's available
@@ -9,6 +12,8 @@ Revision history for Package-Stash
       - complete rewrite in C, for speed (this includes the vivification
         changes from earlier). should be entirely backwards compatible
         otherwise (in terms of documented api anyway).
+
+      - methods were renamed for brevity: s/_package//
 
 0.13  2010-10-31
       - revert the vivification changes for now, to get an actual release out

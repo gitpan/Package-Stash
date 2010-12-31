@@ -5,9 +5,11 @@ META.json
 META.yml
 Makefile.PL
 README
+bin/package-stash-conflicts
 dist.ini
 inc/MMPackageStash.pm
 lib/Package/Stash.pm
+lib/Package/Stash/Conflicts.pm
 lib/Package/Stash/PP.pm
 t/00-compile.t
 t/01-basic.t
