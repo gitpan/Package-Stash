@@ -15,7 +15,7 @@ my %WriteMakefileArgs = (
     'Test::Requires' => '0'
   },
   'CONFIGURE_REQUIRES' => {
-    'Dist::CheckConflicts' => '0.01',
+    'Dist::CheckConflicts' => '0.02',
     'ExtUtils::MakeMaker' => '6.31'
   },
   'DISTNAME' => 'Package-Stash',
@@ -29,7 +29,7 @@ my %WriteMakefileArgs = (
     'Package::Stash::XS' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.19',
+  'VERSION' => '0.20',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
