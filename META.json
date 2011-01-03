@@ -16,13 +16,12 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Dist::CheckConflicts" : 0,
+            "Dist::CheckConflicts" : "0.01",
             "ExtUtils::MakeMaker" : "6.31"
          }
       },
       "runtime" : {
          "requires" : {
-            "Dist::CheckConflicts" : 0,
             "Package::DeprecationManager" : 0,
             "Package::Stash::XS" : 0,
             "Scalar::Util" : 0,
@@ -47,7 +46,7 @@
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.16",
+   "version" : "0.17",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -229,15 +228,9 @@
             "version" : "4.200000"
          },
          {
-            "class" : "Dist::Zilla::Plugin::Prereqs",
-            "config" : {
-               "Dist::Zilla::Plugin::Prereqs" : {
-                  "phase" : "configure",
-                  "type" : "requires"
-               }
-            },
-            "name" : "ConfigureRequires",
-            "version" : "4.200000"
+            "class" : "Dist::Zilla::Plugin::Conflicts",
+            "name" : "Conflicts",
+            "version" : null
          },
          {
             "class" : "Dist::Zilla::Plugin::FinderCode",
@@ -267,6 +260,11 @@
          },
          "version" : "4.200000"
       }
+   },
+   "x_conflicts" : {
+      "Class::MOP" : "1.08",
+      "MooseX::Role::WithOverloading" : "0.08",
+      "namespace::clean" : "0.18"
    }
 }
 

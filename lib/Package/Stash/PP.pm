@@ -1,6 +1,6 @@
 package Package::Stash::PP;
 BEGIN {
-  $Package::Stash::PP::VERSION = '0.16'; # TRIAL
+  $Package::Stash::PP::VERSION = '0.17'; # TRIAL
 }
 use strict;
 use warnings;
@@ -333,7 +333,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -432,7 +432,7 @@ This module is a factoring out of code that used to live here
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Jesse Luehrs.
+This software is copyright (c) 2011 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
