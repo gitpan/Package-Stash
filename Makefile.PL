@@ -31,7 +31,7 @@ my %WriteMakefileArgs = (
     'Package::Stash::XS' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.17',
+  'VERSION' => '0.18',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }

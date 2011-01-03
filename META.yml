@@ -23,7 +23,7 @@ requires:
   perl: 5.8.3
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.17
+version: 0.18
 x_Dist_Zilla:
   plugins:
     -
@@ -189,7 +189,7 @@ x_Dist_Zilla:
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
-      is_trial: 1
+      is_trial: 0
     version: 4.200000
 x_conflicts:
   Class::MOP: 1.08
