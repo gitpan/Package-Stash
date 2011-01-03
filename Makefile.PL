@@ -6,8 +6,6 @@ use warnings;
 use ExtUtils::MakeMaker 6.31;
 check_conflicts();
 
-check_conflicts();
-
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'routines for manipulating stashes',
   'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
@@ -31,7 +29,7 @@ my %WriteMakefileArgs = (
     'Package::Stash::XS' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.18',
+  'VERSION' => '0.19',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
@@ -88,34 +86,6 @@ sub can_cc {
         }
 
         return;
-}
-sub check_conflicts {
-    if (eval { require 'lib/Package/Stash/Conflicts.pm'; 1; }) {
-        if (eval { Package::Stash::Conflicts->check_conflicts; 1 }) {
-            return;
-        }
-        else {
-            my $err = $@;
-            $err =~ s/^/    /mg;
-            warn "***\n$err***\n";
-        }
-    }
-    else {
-        print <<'EOF';
-***
-    Your toolchain doesn't support configure_requires, so Dist::CheckConflicts
-    hasn't been installed yet. You should check for conflicting modules
-    manually using the 'package-stash-conflicts' script that is installed with
-    this distribution once the installation finishes.
-***
-EOF
-    }
-
-    # More or less copied from Module::Build
-    return if $ENV{PERL_MM_USE_DEFAULT};
-    return unless -t STDIN && (-t STDOUT || !(-f STDOUT || -c STDOUT));
-
-    sleep 4;
 }
 
 sub check_conflicts {
