@@ -15,7 +15,7 @@ my %WriteMakefileArgs = (
     'Test::Requires' => '0'
   },
   'CONFIGURE_REQUIRES' => {
-    'Dist::CheckConflicts' => '0.02',
+    'Dist::CheckConflicts' => '0.01',
     'ExtUtils::MakeMaker' => '6.31'
   },
   'DISTNAME' => 'Package-Stash',
@@ -26,10 +26,10 @@ my %WriteMakefileArgs = (
   'NAME' => 'Package::Stash',
   'PREREQ_PM' => {
     'Package::DeprecationManager' => '0',
-    'Package::Stash::XS' => '0',
+    'Package::Stash::XS' => '0.18',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.20',
+  'VERSION' => '0.21',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }

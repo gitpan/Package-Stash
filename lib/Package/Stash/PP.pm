@@ -1,6 +1,6 @@
 package Package::Stash::PP;
 BEGIN {
-  $Package::Stash::PP::VERSION = '0.20';
+  $Package::Stash::PP::VERSION = '0.21';
 }
 use strict;
 use warnings;
@@ -333,7 +333,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.20
+version 0.21
 
 =head1 SYNOPSIS
 
