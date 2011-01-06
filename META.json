@@ -23,7 +23,7 @@
       "runtime" : {
          "requires" : {
             "Package::DeprecationManager" : 0,
-            "Package::Stash::XS" : "0.18",
+            "Package::Stash::XS" : "0.19",
             "Scalar::Util" : 0,
             "perl" : "v5.8.3"
          }
@@ -46,7 +46,7 @@
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.21",
+   "version" : "0.22",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

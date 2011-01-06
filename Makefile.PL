@@ -26,10 +26,10 @@ my %WriteMakefileArgs = (
   'NAME' => 'Package::Stash',
   'PREREQ_PM' => {
     'Package::DeprecationManager' => '0',
-    'Package::Stash::XS' => '0.18',
+    'Package::Stash::XS' => '0.19',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.21',
+  'VERSION' => '0.22',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
