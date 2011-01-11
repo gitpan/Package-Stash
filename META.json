@@ -20,22 +20,23 @@
             "ExtUtils::MakeMaker" : "6.31"
          }
       },
+      "develop" : {
+         "requires" : {
+            "Test::LeakTrace" : 0
+         }
+      },
       "runtime" : {
          "requires" : {
             "Package::DeprecationManager" : 0,
             "Package::Stash::XS" : "0.19",
             "Scalar::Util" : 0,
-            "perl" : "v5.8.3"
+            "perl" : "v5.8.1"
          }
       },
       "test" : {
-         "recommends" : {
-            "Test::LeakTrace" : 0
-         },
          "requires" : {
             "Test::Fatal" : 0,
-            "Test::More" : "0.88",
-            "Test::Requires" : 0
+            "Test::More" : "0.88"
          }
       }
    },
@@ -46,7 +47,7 @@
          "url" : "git://github.com/doy/package-stash.git"
       }
    },
-   "version" : "0.22",
+   "version" : "0.23",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -220,11 +221,11 @@
             "class" : "Dist::Zilla::Plugin::Prereqs",
             "config" : {
                "Dist::Zilla::Plugin::Prereqs" : {
-                  "phase" : "test",
-                  "type" : "recommends"
+                  "phase" : "develop",
+                  "type" : "requires"
                }
             },
-            "name" : "TestRecommends",
+            "name" : "DevelopRequires",
             "version" : "4.200000"
          },
          {

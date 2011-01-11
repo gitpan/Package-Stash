@@ -1,10 +1,20 @@
 #!/usr/bin/env perl
+
+BEGIN {
+  unless ($ENV{RELEASE_TESTING}) {
+    require Test::More;
+    Test::More::plan(skip_all => 'these tests are for release candidate testing');
+  }
+}
+
 use strict;
 use warnings;
 use lib 't/lib';
 use Test::More;
 use Test::Fatal;
-use Test::Requires 'Test::LeakTrace';
+use Test::LeakTrace;
+
+BEGIN { $^P |= 0x210 } # PERLDBf_SUBLINE
 
 use Package::Stash;
 use Symbol;

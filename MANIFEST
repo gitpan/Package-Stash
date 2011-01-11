@@ -20,8 +20,6 @@ t/05-isa.t
 t/06-addsub.t
 t/07-edge-cases.t
 t/10-synopsis.t
-t/20-leaks.t
-t/21-leaks-debug.t
 t/impl-selection/01-choice.t
 t/impl-selection/02-env.t
 t/impl-selection/03-var.t
@@ -29,6 +27,8 @@ t/impl-selection/10-basic-pp.t
 t/impl-selection/11-basic-xs.t
 t/lib/CompileTime.pm
 t/lib/Package/Stash.pm
+t/release-20-leaks.t
+t/release-21-leaks-debug.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t

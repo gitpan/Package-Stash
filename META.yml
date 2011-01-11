@@ -5,7 +5,6 @@ author:
 build_requires:
   Test::Fatal: 0
   Test::More: 0.88
-  Test::Requires: 0
 configure_requires:
   Dist::CheckConflicts: 0.01
   ExtUtils::MakeMaker: 6.31
@@ -20,10 +19,10 @@ requires:
   Package::DeprecationManager: 0
   Package::Stash::XS: 0.19
   Scalar::Util: 0
-  perl: 5.8.3
+  perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.22
+version: 0.23
 x_Dist_Zilla:
   plugins:
     -
@@ -162,9 +161,9 @@ x_Dist_Zilla:
       class: Dist::Zilla::Plugin::Prereqs
       config:
         Dist::Zilla::Plugin::Prereqs:
-          phase: test
-          type: recommends
-      name: TestRecommends
+          phase: develop
+          type: requires
+      name: DevelopRequires
       version: 4.200000
     -
       class: Dist::Zilla::Plugin::Conflicts
