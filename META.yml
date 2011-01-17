@@ -5,6 +5,7 @@ author:
 build_requires:
   Test::Fatal: 0
   Test::More: 0.88
+  Test::Requires: 0
 configure_requires:
   Dist::CheckConflicts: 0.01
   ExtUtils::MakeMaker: 6.31
@@ -22,7 +23,7 @@ requires:
   perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.23
+version: 0.24
 x_Dist_Zilla:
   plugins:
     -

@@ -11,7 +11,8 @@ my %WriteMakefileArgs = (
   'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
   'BUILD_REQUIRES' => {
     'Test::Fatal' => '0',
-    'Test::More' => '0.88'
+    'Test::More' => '0.88',
+    'Test::Requires' => '0'
   },
   'CONFIGURE_REQUIRES' => {
     'Dist::CheckConflicts' => '0.01',
@@ -28,7 +29,7 @@ my %WriteMakefileArgs = (
     'Package::Stash::XS' => '0.19',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.23',
+  'VERSION' => '0.24',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
