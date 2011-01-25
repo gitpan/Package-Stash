@@ -18,12 +18,12 @@ meta-spec:
 name: Package-Stash
 requires:
   Package::DeprecationManager: 0
-  Package::Stash::XS: 0.19
+  Package::Stash::XS: 0.21
   Scalar::Util: 0
   perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.24
+version: 0.25
 x_Dist_Zilla:
   plugins:
     -
