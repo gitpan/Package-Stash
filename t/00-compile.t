@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 use Test::More;
+
+
+
 use File::Find;
 use File::Temp qw{ tempdir };
 
@@ -15,7 +18,7 @@ find(
     $found =~ s{^lib/}{};
     $found =~ s{[/\\]}{::}g;
     $found =~ s/\.pm$//;
-    # nothing to skip
+    return if $found =~ /Conflicts$/;
     push @modules, $found;
   },
   'lib',

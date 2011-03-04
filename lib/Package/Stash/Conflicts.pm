@@ -16,6 +16,7 @@ use Dist::CheckConflicts
         Package::Stash::XS
         Scalar::Util
     ) ],
+
 ;
 
 1;
