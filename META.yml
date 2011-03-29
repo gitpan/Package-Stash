@@ -9,21 +9,22 @@ build_requires:
 configure_requires:
   Dist::CheckConflicts: 0.02
   ExtUtils::MakeMaker: 6.31
-dynamic_config: 0
+dynamic_config: 1
 generated_by: 'Dist::Zilla version 4.200004, CPAN::Meta::Converter version 2.110580'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Package-Stash
+recommends:
+  Package::Stash::XS: 0.22
 requires:
   Package::DeprecationManager: 0
-  Package::Stash::XS: 0.22
   Scalar::Util: 0
   perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.27
+version: 0.28
 x_Dist_Zilla:
   plugins:
     -
@@ -125,7 +126,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::CompileTests
       name: '@DOY/CompileTests'
-      version: ~
+      version: 1.103030
     -
       class: Dist::Zilla::Plugin::Repository
       name: '@DOY/Repository'
@@ -151,12 +152,24 @@ x_Dist_Zilla:
       name: '@DOY/UploadToCPAN'
       version: 4.200004
     -
+      class: inc::DistMeta
+      name: '=inc::DistMeta'
+      version: ~
+    -
       class: Dist::Zilla::Plugin::Prereqs
       config:
         Dist::Zilla::Plugin::Prereqs:
           phase: runtime
           type: requires
       name: Prereqs
+      version: 4.200004
+    -
+      class: Dist::Zilla::Plugin::Prereqs
+      config:
+        Dist::Zilla::Plugin::Prereqs:
+          phase: runtime
+          type: recommends
+      name: RuntimeRecommends
       version: 4.200004
     -
       class: Dist::Zilla::Plugin::Prereqs

@@ -7,6 +7,7 @@ Makefile.PL
 README
 bin/package-stash-conflicts
 dist.ini
+inc/DistMeta.pm
 inc/MMPackageStash.pm
 lib/Package/Stash.pm
 lib/Package/Stash/Conflicts.pm

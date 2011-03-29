@@ -1,5 +1,8 @@
 Revision history for Package-Stash
 
+0.28  2011-03-29
+      - META.json fixes (mst)
+
 0.27  2011-03-27
       - also skip the package-stash-conflicts script (Father Chrysostomos)
 

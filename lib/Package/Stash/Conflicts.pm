@@ -13,7 +13,6 @@ use Dist::CheckConflicts
     },
     -also => [ qw(
         Package::DeprecationManager
-        Package::Stash::XS
         Scalar::Util
     ) ],
 

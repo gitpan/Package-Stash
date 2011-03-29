@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 use Test::More;
+
+
+
 use File::Find;
 use File::Temp qw{ tempdir };
 
@@ -21,16 +24,7 @@ find(
   'lib',
 );
 
-my @scripts;
-find(
-  sub {
-    return unless -f;
-    my $found = $File::Find::name;
-    return if $found =~ /[Cc]onflicts$/;
-    push @scripts, $found;
-  },
-  'bin',
-);
+my @scripts = glob "bin/*";
 
 my $plan = scalar(@modules) + scalar(@scripts);
 $plan ? (plan tests => $plan) : (plan skip_all => "no tests to run");
