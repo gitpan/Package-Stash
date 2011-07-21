@@ -3,7 +3,7 @@
 BEGIN { require 5.8.1; }
 use strict;
 use warnings;
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 check_conflicts();
 
 my %WriteMakefileArgs = (
@@ -16,7 +16,7 @@ my %WriteMakefileArgs = (
   },
   'CONFIGURE_REQUIRES' => {
     'Dist::CheckConflicts' => '0.02',
-    'ExtUtils::MakeMaker' => '6.31'
+    'ExtUtils::MakeMaker' => '6.30'
   },
   'DISTNAME' => 'Package-Stash',
   'EXE_FILES' => [
@@ -28,7 +28,7 @@ my %WriteMakefileArgs = (
     'Package::DeprecationManager' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.29',
+  'VERSION' => '0.30',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
@@ -68,7 +68,7 @@ sub can_run {
 
         for my $dir ((split /$Config::Config{path_sep}/, $ENV{PATH}), '.') {
                 next if $dir eq '';
-                my $abs = File::Spec->catfile($dir, $_[1]);
+                my $abs = File::Spec->catfile($dir, $_[0]);
                 return $abs if (-x $abs or $abs = MM->maybe_command($abs));
         }
 

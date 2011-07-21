@@ -1,6 +1,6 @@
 package Package::Stash::PP;
 BEGIN {
-  $Package::Stash::PP::VERSION = '0.29';
+  $Package::Stash::PP::VERSION = '0.30';
 }
 use strict;
 use warnings;
@@ -20,7 +20,17 @@ use constant BROKEN_WEAK_STASH     => ($] < 5.010);
 sub new {
     my $class = shift;
     my ($package) = @_;
-    my $namespace;
+
+    if (!defined($package) || (ref($package) && ref($package) ne 'HASH')) {
+        confess "Package::Stash->new must be passed the name of the "
+              . "package to access";
+    }
+    elsif (ref($package) eq 'HASH') {
+        confess "The pure perl implementation of Package::Stash doesn't "
+              . "currently support anonymous stashes. You should install "
+              . "Package::Stash::XS";
+    }
+
     return bless {
         'package' => $package,
     }, $class;
@@ -128,8 +138,7 @@ sub add_symbol {
 
 sub remove_glob {
     my ($self, $name) = @_;
-    no strict 'refs';
-    delete ${$self->name . '::'}{$name};
+    delete $self->namespace->{$name};
 }
 
 sub has_symbol {
@@ -345,7 +354,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.29
+version 0.30
 
 =head1 SYNOPSIS
 

@@ -1,5 +1,8 @@
 Revision history for Package-Stash
 
+0.30  2011-07-21
+      - fix compiler detection in Makefile.PL (ribasushi)
+
 0.29  2011-04-06
       - no, *really* skip the package-stash-conflict script
 
