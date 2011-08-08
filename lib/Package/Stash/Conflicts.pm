@@ -12,6 +12,7 @@ use Dist::CheckConflicts
         'namespace::clean' => '0.18',
     },
     -also => [ qw(
+        Dist::CheckConflicts
         Package::DeprecationManager
         Scalar::Util
     ) ],

@@ -25,10 +25,11 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'Package::Stash',
   'PREREQ_PM' => {
+    'Dist::CheckConflicts' => '0.02',
     'Package::DeprecationManager' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.30',
+  'VERSION' => '0.31',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }

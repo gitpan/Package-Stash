@@ -19,12 +19,13 @@ name: Package-Stash
 recommends:
   Package::Stash::XS: 0.22
 requires:
+  Dist::CheckConflicts: 0.02
   Package::DeprecationManager: 0
   Scalar::Util: 0
   perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.30
+version: 0.31
 x_Dist_Zilla:
   plugins:
     -
@@ -190,7 +191,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Conflicts
       name: Conflicts
-      version: 0.07
+      version: 0.08
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':InstallModules'

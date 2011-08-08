@@ -1,6 +1,6 @@
 package Package::Stash::PP;
 BEGIN {
-  $Package::Stash::PP::VERSION = '0.30';
+  $Package::Stash::PP::VERSION = '0.31';
 }
 use strict;
 use warnings;
@@ -99,7 +99,7 @@ sub _valid_for_type {
     }
     else {
         my $ref = reftype($value);
-        return !defined($ref) || $ref eq 'SCALAR' || $ref eq 'REF' || $ref eq 'LVALUE';
+        return !defined($ref) || $ref eq 'SCALAR' || $ref eq 'REF' || $ref eq 'LVALUE' || $ref eq 'REGEXP' || $ref eq 'VSTRING';
     }
 }
 
@@ -354,7 +354,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 SYNOPSIS
 
