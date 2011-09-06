@@ -27,7 +27,7 @@
       },
       "runtime" : {
          "recommends" : {
-            "Package::Stash::XS" : "0.22"
+            "Package::Stash::XS" : "0.24"
          },
          "requires" : {
             "Dist::CheckConflicts" : "0.02",
@@ -52,7 +52,7 @@
          "web" : "http://github.com/doy/package-stash"
       }
    },
-   "version" : "0.31",
+   "version" : "0.32",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

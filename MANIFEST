@@ -14,8 +14,8 @@ lib/Package/Stash/Conflicts.pm
 lib/Package/Stash/PP.pm
 t/00-compile.t
 t/addsub.t
-t/author-20-leaks.t
-t/author-21-leaks-debug.t
+t/author-leaks-debug.t
+t/author-leaks.t
 t/basic.t
 t/compile-time.t
 t/edge-cases.t
@@ -30,6 +30,7 @@ t/io.t
 t/isa.t
 t/lib/CompileTime.pm
 t/lib/Package/Stash.pm
+t/paamayim_nekdotayim.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t

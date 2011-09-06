@@ -1,6 +1,6 @@
 package Package::Stash;
 BEGIN {
-  $Package::Stash::VERSION = '0.31';
+  $Package::Stash::VERSION = '0.32';
 }
 use strict;
 use warnings;
@@ -102,7 +102,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.31
+version 0.32
 
 =head1 SYNOPSIS
 
@@ -215,6 +215,11 @@ to the variable names (basically, a clone of the stash).
 =head1 BUGS / CAVEATS
 
 =over 4
+
+=item * Prior to perl 5.10, scalar slots are only considered to exist if they are defined
+
+This is due to a shortcoming within perl itself. See
+L<perlref/Making References> point 7 for more information.
 
 =item * GLOB and FORMAT variables are not (yet) accessible through this module.
 

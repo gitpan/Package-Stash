@@ -391,8 +391,8 @@ like(exception {
         [qw(BEGIN bar baz foo quuuux quuux quux)],
         "list_all_symbols",
     );
-    { local $TODO = ($] < 5.010 || $Package::Stash::IMPLEMENTATION eq 'PP')
-          ? "undef scalars aren't visible on 5.8, or from pure perl at all"
+    { local $TODO = $] < 5.010
+          ? "undef scalars aren't visible on 5.8"
           : undef;
     is_deeply(
         [sort $quuux->list_all_symbols('SCALAR')],
@@ -416,5 +416,25 @@ like(exception {
         "list_all_symbols CODE",
     );
 }
+
+for my $package ('Foo:Bar', 'Foo/Bar', 'Foo Bar', 'Foo:::Bar', '') {
+    like(
+        exception { Package::Stash->new($package) },
+        qr/^$package is not a module name/,
+        "$package is not a module name"
+    );
+}
+
+like(
+    exception { Package::Stash->new([]) },
+    qr/^Package::Stash->new must be passed the name of the package to access/,
+    "module name must be a string"
+);
+
+like(
+    exception { Package::Stash->new(undef) },
+    qr/^Package::Stash->new must be passed the name of the package to access/,
+    "module name must be a string"
+);
 
 done_testing;

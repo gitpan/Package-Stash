@@ -17,7 +17,7 @@ meta-spec:
   version: 1.4
 name: Package-Stash
 recommends:
-  Package::Stash::XS: 0.22
+  Package::Stash::XS: 0.24
 requires:
   Dist::CheckConflicts: 0.02
   Package::DeprecationManager: 0
@@ -25,7 +25,7 @@ requires:
   perl: 5.8.1
 resources:
   repository: git://github.com/doy/package-stash.git
-version: 0.31
+version: 0.32
 x_Dist_Zilla:
   plugins:
     -

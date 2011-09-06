@@ -29,7 +29,7 @@ my %WriteMakefileArgs = (
     'Package::DeprecationManager' => '0',
     'Scalar::Util' => '0'
   },
-  'VERSION' => '0.31',
+  'VERSION' => '0.32',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
@@ -52,7 +52,7 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
-$WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'} = 0.22
+$WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'} = 0.24
   if can_cc();
 
 WriteMakefile(%WriteMakefileArgs);
