@@ -13,9 +13,16 @@ use Dist::CheckConflicts
         'namespace::clean' => '0.18',
     },
     -also => [ qw(
+        B
+        Carp
         Dist::CheckConflicts
+        Module::Implementation
         Package::DeprecationManager
         Scalar::Util
+        Symbol
+        constant
+        strict
+        warnings
     ) ],
 
 ;

@@ -255,7 +255,13 @@ is($foo_stash->get_symbol('@foo'), $ARRAY, '... got the right values for @Foo::f
 }
 
 {
-    $foo_stash->add_symbol('%zork');
+    $foo_stash->add_symbol('%bare');
+    ok(!$foo_stash->has_symbol('$bare'),
+       "add_symbol with single argument doesn't vivify scalar slot");
+}
+
+{
+    $foo_stash->add_symbol('%zork', {});
 
     my $syms = $foo_stash->get_all_symbols('HASH');
 
@@ -269,10 +275,12 @@ is($foo_stash->get_symbol('@foo'), $ARRAY, '... got the right values for @Foo::f
         is($syms->{$symbol}, $foo_stash->get_symbol('%' . $symbol), '... got the right symbol');
     }
 
-    no warnings 'once';
     is_deeply(
         $syms,
-        { zork => \%Foo::zork },
+        {
+            zork => *{ $Foo::{zork} }{HASH},
+            bare => *{ $Foo::{bare} }{HASH},
+        },
         "got the right ones",
     );
 }
@@ -420,5 +428,25 @@ like(exception {
         "list_all_symbols CODE",
     );
 }
+
+for my $package ('Foo:Bar', 'Foo/Bar', 'Foo Bar', 'Foo:::Bar', '') {
+    like(
+        exception { Package::Stash->new($package) },
+        qr/^$package is not a module name/,
+        "$package is not a module name"
+    );
+}
+
+like(
+    exception { Package::Stash->new([]) },
+    qr/^Package::Stash->new must be passed the name of the package to access/,
+    "module name must be a string"
+);
+
+like(
+    exception { Package::Stash->new(undef) },
+    qr/^Package::Stash->new must be passed the name of the package to access/,
+    "module name must be a string"
+);
 
 done_testing;

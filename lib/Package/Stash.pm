@@ -1,40 +1,27 @@
 package Package::Stash;
+BEGIN {
+  $Package::Stash::AUTHORITY = 'cpan:DOY';
+}
 {
-  $Package::Stash::VERSION = '0.33';
+  $Package::Stash::VERSION = '0.34';
 }
 use strict;
 use warnings;
+use 5.008001;
 # ABSTRACT: routines for manipulating stashes
 
 our $IMPLEMENTATION;
 
+use Module::Implementation 0.06;
+
 BEGIN {
-    $IMPLEMENTATION = $ENV{PACKAGE_STASH_IMPLEMENTATION}
-        if exists $ENV{PACKAGE_STASH_IMPLEMENTATION};
+    local $ENV{PACKAGE_STASH_IMPLEMENTATION} = $IMPLEMENTATION
+      if ( $IMPLEMENTATION and not $ENV{PACKAGE_STASH_IMPLEMENTATION} );
 
-    my $err;
-    if ($IMPLEMENTATION) {
-        if (!eval "require Package::Stash::$IMPLEMENTATION; 1") {
-            require Carp;
-            Carp::croak("Could not load Package::Stash::$IMPLEMENTATION: $@");
-        }
-    }
-    else {
-        for my $impl ('XS', 'PP') {
-            if (eval "require Package::Stash::$impl; 1;") {
-                $IMPLEMENTATION = $impl;
-                last;
-            }
-            else {
-                $err .= $@;
-            }
-        }
-    }
-
-    if (!$IMPLEMENTATION) {
-        require Carp;
-        Carp::croak("Could not find a suitable Package::Stash implementation: $err");
-    }
+    Module::Implementation::build_loader_sub(
+        implementations => [ 'XS', 'PP' ]
+    )->();
+    $IMPLEMENTATION = Module::Implementation::implementation_for(__PACKAGE__);
 
     my $impl = "Package::Stash::$IMPLEMENTATION";
     my $from = $impl->new($impl);
@@ -56,37 +43,37 @@ use Package::DeprecationManager -deprecations => {
 };
 
 sub add_package_symbol {
-    #deprecated('add_package_symbol is deprecated, please use add_symbol');
+    deprecated('add_package_symbol is deprecated, please use add_symbol');
     shift->add_symbol(@_);
 }
 
 sub remove_package_glob {
-    #deprecated('remove_package_glob is deprecated, please use remove_glob');
+    deprecated('remove_package_glob is deprecated, please use remove_glob');
     shift->remove_glob(@_);
 }
 
 sub has_package_symbol {
-    #deprecated('has_package_symbol is deprecated, please use has_symbol');
+    deprecated('has_package_symbol is deprecated, please use has_symbol');
     shift->has_symbol(@_);
 }
 
 sub get_package_symbol {
-    #deprecated('get_package_symbol is deprecated, please use get_symbol');
+    deprecated('get_package_symbol is deprecated, please use get_symbol');
     shift->get_symbol(@_);
 }
 
 sub get_or_add_package_symbol {
-    #deprecated('get_or_add_package_symbol is deprecated, please use get_or_add_symbol');
+    deprecated('get_or_add_package_symbol is deprecated, please use get_or_add_symbol');
     shift->get_or_add_symbol(@_);
 }
 
 sub remove_package_symbol {
-    #deprecated('remove_package_symbol is deprecated, please use remove_symbol');
+    deprecated('remove_package_symbol is deprecated, please use remove_symbol');
     shift->remove_symbol(@_);
 }
 
 sub list_all_package_symbols {
-    #deprecated('list_all_package_symbols is deprecated, please use list_all_symbols');
+    deprecated('list_all_package_symbols is deprecated, please use list_all_symbols');
     shift->list_all_symbols(@_);
 }
 
@@ -94,6 +81,7 @@ sub list_all_package_symbols {
 1;
 
 __END__
+
 =pod
 
 =head1 NAME
@@ -102,7 +90,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.33
+version 0.34
 
 =head1 SYNOPSIS
 
@@ -231,6 +219,16 @@ Please report any bugs through RT: email
 C<bug-package-stash at rt.cpan.org>, or browse to
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Package-Stash>.
 
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Class::MOP::Package>
+
+This module is a factoring out of code that used to live here
+
+=back
+
 =head1 SUPPORT
 
 You can find this documentation for this module with the perldoc command.
@@ -274,22 +272,15 @@ get_or_add_package_symbol
 remove_package_symbol
 list_all_package_symbols
 
-=head1 SEE ALSO
+=head1 AUTHOR
 
-=over 4
-
-=item * L<Class::MOP::Package>
-
-This module is a factoring out of code that used to live here
-
-=back
+Jesse Luehrs <doy at tozt dot net>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Jesse Luehrs.
+This software is copyright (c) 2013 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
