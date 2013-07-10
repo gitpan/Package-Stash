@@ -8,7 +8,7 @@ check_conflicts();
 
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'routines for manipulating stashes',
-  'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
+  'AUTHOR' => 'Jesse Luehrs <doy@tozt.net>',
   'BUILD_REQUIRES' => {
     'File::Find' => '0',
     'File::Temp' => '0',
@@ -31,15 +31,15 @@ my %WriteMakefileArgs = (
     'B' => '0',
     'Carp' => '0',
     'Dist::CheckConflicts' => '0.02',
+    'Getopt::Long' => '0',
     'Module::Implementation' => '0.06',
-    'Package::DeprecationManager' => '0',
     'Scalar::Util' => '0',
     'Symbol' => '0',
     'constant' => '0',
     'strict' => '0',
     'warnings' => '0'
   },
-  'VERSION' => '0.34',
+  'VERSION' => '0.35',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
@@ -119,6 +119,8 @@ sub check_conflicts {
 ***
 EOF
     }
+
+    return if $ENV{AUTOMATED_TESTING} || $ENV{NONINTERACTIVE_TESTING};
 
     # More or less copied from Module::Build
     return if $ENV{PERL_MM_USE_DEFAULT};

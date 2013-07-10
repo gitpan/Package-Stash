@@ -3,7 +3,7 @@ BEGIN {
   $Package::Stash::AUTHORITY = 'cpan:DOY';
 }
 {
-  $Package::Stash::VERSION = '0.34';
+  $Package::Stash::VERSION = '0.35';
 }
 use strict;
 use warnings;
@@ -32,51 +32,6 @@ BEGIN {
     }
 }
 
-use Package::DeprecationManager -deprecations => {
-    'Package::Stash::add_package_symbol'        => 0.14,
-    'Package::Stash::remove_package_glob'       => 0.14,
-    'Package::Stash::has_package_symbol'        => 0.14,
-    'Package::Stash::get_package_symbol'        => 0.14,
-    'Package::Stash::get_or_add_package_symbol' => 0.14,
-    'Package::Stash::remove_package_symbol'     => 0.14,
-    'Package::Stash::list_all_package_symbols'  => 0.14,
-};
-
-sub add_package_symbol {
-    deprecated('add_package_symbol is deprecated, please use add_symbol');
-    shift->add_symbol(@_);
-}
-
-sub remove_package_glob {
-    deprecated('remove_package_glob is deprecated, please use remove_glob');
-    shift->remove_glob(@_);
-}
-
-sub has_package_symbol {
-    deprecated('has_package_symbol is deprecated, please use has_symbol');
-    shift->has_symbol(@_);
-}
-
-sub get_package_symbol {
-    deprecated('get_package_symbol is deprecated, please use get_symbol');
-    shift->get_symbol(@_);
-}
-
-sub get_or_add_package_symbol {
-    deprecated('get_or_add_package_symbol is deprecated, please use get_or_add_symbol');
-    shift->get_or_add_symbol(@_);
-}
-
-sub remove_package_symbol {
-    deprecated('remove_package_symbol is deprecated, please use remove_symbol');
-    shift->remove_symbol(@_);
-}
-
-sub list_all_package_symbols {
-    deprecated('list_all_package_symbols is deprecated, please use list_all_symbols');
-    shift->list_all_symbols(@_);
-}
-
 
 1;
 
@@ -90,7 +45,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -264,17 +219,9 @@ Jesse Luehrs <doy at tozt dot net>
 Based on code from L<Class::MOP::Package>, by Stevan Little and the Moose
 Cabal.
 
-=for Pod::Coverage add_package_symbol
-remove_package_glob
-has_package_symbol
-get_package_symbol
-get_or_add_package_symbol
-remove_package_symbol
-list_all_package_symbols
-
 =head1 AUTHOR
 
-Jesse Luehrs <doy at tozt dot net>
+Jesse Luehrs <doy@tozt.net>
 
 =head1 COPYRIGHT AND LICENSE
 

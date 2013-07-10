@@ -3,7 +3,7 @@ BEGIN {
   $Package::Stash::PP::AUTHORITY = 'cpan:DOY';
 }
 {
-  $Package::Stash::PP::VERSION = '0.34';
+  $Package::Stash::PP::VERSION = '0.35';
 }
 use strict;
 use warnings;
@@ -429,7 +429,7 @@ Package::Stash::PP - pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -523,7 +523,7 @@ remove_glob
 
 =head1 AUTHOR
 
-Jesse Luehrs <doy at tozt dot net>
+Jesse Luehrs <doy@tozt.net>
 
 =head1 COPYRIGHT AND LICENSE
 
