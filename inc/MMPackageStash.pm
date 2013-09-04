@@ -8,10 +8,13 @@ around _build_MakeFile_PL_template => sub {
     my $orig = shift;
     my $self = shift;
 
-    # copied from M::I
-    my $can_cc = <<'CAN_CC';
+    my $xs_version = $self->zilla->prereqs->requirements_for('runtime', 'recommends')->as_string_hash->{'Package::Stash::XS'};
+
+    # can_run and can_cc copied from M::I
+    my $helpers = <<'HELPERS';
 use Config ();
 use File::Spec ();
+use Text::ParseWords ();
 
 # check if we can run some command
 sub can_run {
@@ -40,15 +43,40 @@ sub can_cc {
 
         return;
 }
-CAN_CC
+
+# XXX this is gross, but apparently it's the least gross option?
+sub parse_args {
+    my $tmp = {};
+    # copied from EUMM
+    ExtUtils::MakeMaker::parse_args(
+        $tmp,
+        Text::ParseWords::shellwords($ENV{PERL_MM_OPT} || ''),
+        @ARGV,
+    );
+    return $tmp->{ARGS} || {};
+}
+HELPERS
+
+    my $fixup_prereqs = <<PREREQS;
+\$WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'} = $xs_version
+    if !parse_args()->{PUREPERL_ONLY} && can_cc();
+PREREQS
 
     my $template = $self->$orig(@_);
+    $template =~ s/(WriteMakefile\()/$fixup_prereqs\n$1/;
+    $template .= $helpers;
 
-    my $xs_version = $self->zilla->prereqs->requirements_for('runtime', 'recommends')->as_string_hash->{'Package::Stash::XS'};
+    return $template;
+};
 
-    $template =~ s/(WriteMakefile\()/\$WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'} = $xs_version\n  if can_cc();\n\n$1/;
-
-    return $template . $can_cc;
+after register_prereqs => sub {
+    my $self = shift;
+    $self->zilla->register_prereqs(
+        { phase => 'configure' },
+        'Config'           => 0,
+        'File::Spec'       => 0,
+        'Text::ParseWords' => 0,
+    );
 };
 
 __PACKAGE__->meta->make_immutable;

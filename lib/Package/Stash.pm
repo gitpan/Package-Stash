@@ -3,7 +3,7 @@ BEGIN {
   $Package::Stash::AUTHORITY = 'cpan:DOY';
 }
 {
-  $Package::Stash::VERSION = '0.35';
+  $Package::Stash::VERSION = '0.36';
 }
 use strict;
 use warnings;
@@ -19,17 +19,22 @@ BEGIN {
       if ( $IMPLEMENTATION and not $ENV{PACKAGE_STASH_IMPLEMENTATION} );
 
     Module::Implementation::build_loader_sub(
-        implementations => [ 'XS', 'PP' ]
+        implementations => [ 'XS', 'PP' ],
+        symbols         => [qw(
+            new
+            name
+            namespace
+            add_symbol
+            remove_glob
+            has_symbol
+            get_symbol
+            get_or_add_symbol
+            remove_symbol
+            list_all_symbols
+            get_all_symbols
+        )],
     )->();
     $IMPLEMENTATION = Module::Implementation::implementation_for(__PACKAGE__);
-
-    my $impl = "Package::Stash::$IMPLEMENTATION";
-    my $from = $impl->new($impl);
-    my $to = $impl->new(__PACKAGE__);
-    my $methods = $from->get_all_symbols('CODE');
-    for my $meth (keys %$methods) {
-        $to->add_symbol("&$meth" => $methods->{$meth});
-    }
 }
 
 
@@ -45,7 +50,7 @@ Package::Stash - routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 
@@ -155,6 +160,55 @@ C<$type_filter> is passed, the hash will contain every variable of that type in
 the package as values, otherwise, it will contain the typeglobs corresponding
 to the variable names (basically, a clone of the stash).
 
+=head1 WORKING WITH VARIABLES
+
+It is important to note, that when working with scalar variables, the default
+behavior is to B<copy> values.
+
+  my $stash = Package::Stash->new('Some::Namespace');
+  my $variable = 1;
+  # $Some::Namespace::name is a copy of $variable
+  $stash->add_symbol('$name', $variable);
+  $variable++
+  # $Some::Namespace::name == 1 , $variable == 2
+
+This will likely confuse people who expect it to work the same as typeglob
+assignment, which simply creates new references to existing variables.
+
+  my $variable = 1;
+  {
+      no strict 'refs';
+      # assign $Package::Stash::name = $variable
+      *{'Package::Stash::name'} = \$variable;
+  }
+  $variable++ # affects both names
+
+If this behaviour is desired when working with Package::Stash, simply pass
+Package::Stash a scalar ref:
+
+  my $stash = Package::Stash->new('Some::Namespace');
+  my $variable = 1;
+  # $Some::Namespace::name is now $variable
+  $stash->add_symbol('$name', \$variable);
+  $variable++
+  # $Some::Namespace::name == 2 , $variable == 2
+
+This will be what you want as well if you're ever working with L<Readonly>
+variables:
+
+  use Readonly;
+  Readonly my $value, 'hello';
+
+  $stash->add_symbol('$name', \$value); # reference
+  print $Some::Namespace::name; # hello
+  # Tries to modify the read-only 'hello' and dies.
+  $Some::Namespace::name .= " world";
+
+  $stash->add_symbol('$name', $value); # copy
+  print $Some::Namespace::name; # hello
+  # No problem, modifying a copy, not the original
+  $Some::Namespace::name .= " world";
+
 =head1 BUGS / CAVEATS
 
 =over 4
@@ -194,27 +248,25 @@ You can also look for information at:
 
 =over 4
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item * MetaCPAN
 
-L<http://annocpan.org/dist/Package-Stash>
+L<https://metacpan.org/release/Package-Stash>
 
-=item * CPAN Ratings
+=item * Github
 
-L<http://cpanratings.perl.org/d/Package-Stash>
+L<https://github.com/doy/package-stash>
 
 =item * RT: CPAN's request tracker
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Package-Stash>
 
-=item * Search CPAN
+=item * CPAN Ratings
 
-L<http://search.cpan.org/dist/Package-Stash>
+L<http://cpanratings.perl.org/d/Package-Stash>
 
 =back
 
-=head1 AUTHOR
-
-Jesse Luehrs <doy at tozt dot net>
+=head1 HISTORY
 
 Based on code from L<Class::MOP::Package>, by Stevan Little and the Moose
 Cabal.

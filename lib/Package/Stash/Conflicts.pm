@@ -29,7 +29,7 @@ Package::Stash::Conflicts - Provide information on conflicts for Package::Stash
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 AUTHOR
 

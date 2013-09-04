@@ -15,11 +15,15 @@ my %WriteMakefileArgs = (
     'Test::Fatal' => '0',
     'Test::More' => '0.88',
     'Test::Requires' => '0',
-    'base' => '0'
+    'base' => '0',
+    'lib' => '0'
   },
   'CONFIGURE_REQUIRES' => {
+    'Config' => '0',
     'Dist::CheckConflicts' => '0.02',
-    'ExtUtils::MakeMaker' => '6.30'
+    'ExtUtils::MakeMaker' => '6.30',
+    'File::Spec' => '0',
+    'Text::ParseWords' => '0'
   },
   'DISTNAME' => 'Package-Stash',
   'EXE_FILES' => [
@@ -39,7 +43,7 @@ my %WriteMakefileArgs = (
     'strict' => '0',
     'warnings' => '0'
   },
-  'VERSION' => '0.35',
+  'VERSION' => '0.36',
   'test' => {
     'TESTS' => 't/*.t t/impl-selection/*.t'
   }
@@ -63,12 +67,13 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
 $WriteMakefileArgs{PREREQ_PM}{'Package::Stash::XS'} = 0.26
-  if can_cc();
+    if !parse_args()->{PUREPERL_ONLY} && can_cc();
 
 WriteMakefile(%WriteMakefileArgs);
 
 use Config ();
 use File::Spec ();
+use Text::ParseWords ();
 
 # check if we can run some command
 sub can_run {
@@ -96,6 +101,18 @@ sub can_cc {
         }
 
         return;
+}
+
+# XXX this is gross, but apparently it's the least gross option?
+sub parse_args {
+    my $tmp = {};
+    # copied from EUMM
+    ExtUtils::MakeMaker::parse_args(
+        $tmp,
+        Text::ParseWords::shellwords($ENV{PERL_MM_OPT} || ''),
+        @ARGV,
+    );
+    return $tmp->{ARGS} || {};
 }
 
 sub check_conflicts {

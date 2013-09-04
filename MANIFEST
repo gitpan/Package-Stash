@@ -7,7 +7,6 @@ Makefile.PL
 README
 bin/package-stash-conflicts
 dist.ini
-inc/DistMeta.pm
 inc/MMPackageStash.pm
 lib/Package/Stash.pm
 lib/Package/Stash/Conflicts.pm
@@ -38,6 +37,7 @@ t/paamayim_nekdotayim.t
 t/scalar-values.t
 t/stash-deletion.t
 t/synopsis.t
+t/warnings.t
 xt/author/leaks-debug.t
 xt/author/leaks.t
 xt/release/eol.t
